@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      function getNameJQ() {
+          $.ajax({
+              url: '/api/name',
+              type: 'GET',
+              dataType: 'json',
+              success: function (data) {
+                  const studentName = data.middleName + ' ' + data.firstName + ' ' + data.lastName;
+                  $('#name').text(studentName);
+              },
+              error: function (xhr, status, error) {
+                  console.error(error)
+              }
+          });
+      }
+    </script>
+</head>
+<body>
+  <button onclick="getNameJQ()">Get FIO</button>
+  <h2>Student Name:</h2>
+  <p id="name"></p>
+</body>
+</html>

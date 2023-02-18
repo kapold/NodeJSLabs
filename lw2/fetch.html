@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fetch</title>
+    <script>
+      function getNameFetch() {
+        fetch('/api/name')
+                .then(response => response.json())
+                .then(data => {
+                  const studentName = `${data.firstName} ${data.middleName} ${data.lastName}`;
+                  document.getElementById('name').textContent = studentName;
+                })
+                .catch(err => console.error(err));
+      }
+    </script>
+</head>
+<body>
+  <button onclick="getNameFetch()">Get FIO</button>
+  <h2>Student Name:</h2>
+  <p id="name"></p>
+</body>
+</html>
