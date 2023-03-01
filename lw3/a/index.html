@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Factorial</title>
+    <script>
+        function calculateFactorials() {
+            var output = document.getElementById("output");
+            output.innerHTML = "";
+            var startTime = new Date().getTime();
+            for (var k = 1; k <= 20; k++) {
+                fetch("/fact?k=" + k)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        var t = new Date().getTime() - startTime;
+                        var result = t + "-" + data.k + "/" + data.fact;
+                        var li = document.createElement("li");
+                        li.appendChild(
+                            document.createTextNode(`${data.k}.Результат: ${result}`)
+                        );
+                        output.appendChild(li);
+                    });
+            }
+        }
+    </script>
+</head>
+<body>
+    <button onclick="calculateFactorials()">Calculate</button>
+    <ul id="output"></ul>
+</body>
+</html>
