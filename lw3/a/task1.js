@@ -6,21 +6,19 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 let state = 'norm';
-let possibleStates = ['norm', 'stop', 'test', 'idle']
+let possibleStates = ['norm', 'stop', 'test', 'idle'];
 
 rl.setPrompt(`Current State: ${state}\nEnter new state (norm, stop, test, idle) or 'exit' to close server:\n`);
 rl.prompt();
 
 rl.on('line', (input) => {
-    input = input.trim();
-
     if (input === 'exit') {
         console.log('Exiting from server.');
         process.exit(0);
     }
     else if (possibleStates.includes(input)) {
         state = input;
-        console.log(`\nCurrent State: ${state}\nEnter new state (norm, stop, test, idle) or 'exit' to close server:`)
+        console.log(`\nCurrent State: ${state}\nEnter new state (norm, stop, test, idle) or 'exit' to close server:`);
     }
     else {
         console.log(`Invalid command: ${input}`);

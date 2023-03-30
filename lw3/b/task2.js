@@ -8,18 +8,18 @@ function secondJob() {
 
 secondJob()
     .then((result) => {
-        console.log(result);
+        console.log("FJ: " + result);
     })
     .catch((error) => {
-        console.error(error);
+        console.error("FJ: " +  error);
     });
 
 async function run() {
     try {
         const result = await secondJob();
-        console.log(result);
+        console.log("Async: " + result);
     } catch (error) {
-        console.error(error);
+        console.error("Async: " + error);
     }
 }
 

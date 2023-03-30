@@ -1,0 +1,16 @@
+{
+  "name": "m0603_adamovich",
+  "version": "1.0.0",
+  "description": "m0603 package for sending message through nodemailer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "kapold",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemailer": "^6.9.1"
+  }
+}

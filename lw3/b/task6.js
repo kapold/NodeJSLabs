@@ -6,9 +6,11 @@ function square(num) {
         else {
             const timeout = setTimeout(() => {
                 reject('Timeout: square function took too long');
-            }, 3000);
+            }, 10000);
             const result = num * num;
-            resolve(result);
+            setTimeout(() => {
+                resolve(result);
+            }, 10000);
             clearTimeout(timeout);
         }
     });
@@ -23,9 +25,11 @@ function cube(num) {
         else {
             const timeout = setTimeout(() => {
                 reject('Timeout: cube function took too long');
-            }, 3000);
+            }, 5000);
             const result = num * num * num;
-            resolve(result);
+            setTimeout(() => {
+                resolve(result);
+            }, 5000);
             clearTimeout(timeout);
         }
     });
@@ -39,9 +43,11 @@ function fourthPower(num) {
         else {
             const timeout = setTimeout(() => {
                 reject('Timeout: fourthPower function took too long');
-            }, 3000);
+            }, 2000);
             const result = num * num * num * num;
-            resolve(result);
+            setTimeout(() => {
+                resolve(result);
+            }, 2000);
             clearTimeout(timeout);
         }
     });

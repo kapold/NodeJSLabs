@@ -5,7 +5,9 @@ function square(num) {
         }
         else {
             const result = num * num;
-            resolve(result);
+            setTimeout(() => {
+                resolve(result);
+            }, 1000);
         }
     });
 }
@@ -17,7 +19,9 @@ function cube(num) {
         }
         else {
             const result = num * num * num;
-            resolve(result);
+            setTimeout(() => {
+                resolve(result);
+            }, 5000);
         }
     });
 }
@@ -29,7 +33,9 @@ function fourthPower(num) {
         }
         else {
             const result = num * num * num * num;
-            resolve(result);
+            setTimeout(() => {
+                resolve(result);
+            }, 2000);
         }
     });
 }

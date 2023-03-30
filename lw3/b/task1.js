@@ -8,7 +8,7 @@ function firstJob() {
 
 firstJob()
     .then((result) => {
-        console.log(result);
+        console.log("FJ: " + result);
     })
     .catch((error) => {
         console.error(error);
@@ -17,7 +17,7 @@ firstJob()
 async function run() {
     try {
         const result = await firstJob();
-        console.log(result);
+        console.log("Async: " + result);
     } catch (error) {
         console.error(error);
     }

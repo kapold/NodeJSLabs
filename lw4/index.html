@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>LW4</title>
+    <style>
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      input {
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+      }
+
+      button {
+        width: 174px;
+        padding: 10px;
+        background-color: #00fcc1;
+        color: black;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #ff033e;
+        color: white;
+      }
+
+      h2 {
+        font-size: 18px;
+        margin-top: 20px;
+      }
+
+      #allResult {
+        margin-top: 20px;
+        font-weight: bold;
+      }
+
+      #d1 {
+        position: absolute;
+        top: 40px;
+        left: 40px;
+      }
+
+      #d2 {
+        position: absolute;
+        top: 40px;
+        left: 280px;
+      }
+
+      #d3 {
+        position: absolute;
+        top: 40px;
+        left: 500px;
+      }
+
+      #d4 {
+        position: absolute;
+        top: 40px;
+        left: 720px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="d1">
+      <h2>Добавить:</h2>
+      <label for="firstName">Имя:</label>
+      <input type="text" id="firstName" name="firstName" /><br />
+
+      <label for="lastName">Фамилия:</label>
+      <input type="text" id="lastName" name="lastName" /><br />
+
+      <button onclick="addRow()">Добавить</button>
+    </div>
+
+    <div id="d2">
+      <h2>Обновить:</h2>
+      <label for="id">id:</label>
+      <input type="text" id="id" name="id" /><br />
+
+      <label for="newFirstName">Имя:</label>
+      <input type="text" id="newFirstName" name="newFirstName" /><br />
+
+      <label for="newLastName">Фамилия:</label>
+      <input type="text" id="newLastName" name="newLastName" /><br />
+
+      <button onclick="updateRow()">Обновить</button>
+    </div>
+
+    <div id="d3">
+      <h2>Удалить:</h2>
+      <label for="deleteId">id:</label>
+      <input type="text" id="deleteId" name="deleteId" /><br />
+
+      <button onclick="deleteRow()">Удалить</button>
+    </div>
+
+    <div id="d4">
+      <h2>Получить данные</h2>
+      <button onclick="getRows()">Получить</button>
+      <p id="allResult"></p>
+    </div>
+
+    <script>
+      function addRow() {
+        const firstName = document.getElementById("firstName").value;
+        const lastName = document.getElementById("lastName").value;
+
+        fetch("http://localhost:5000/api/db", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ firstName, lastName }),
+        })
+          .then((response) => response.json())
+          .then((data) => console.log(data))
+          .catch((error) => console.error(error));
+      }
+
+      function updateRow() {
+        const id = document.getElementById("id").value;
+        const newFirstName = document.getElementById("newFirstName").value;
+        const newLastName = document.getElementById("newLastName").value;
+
+        fetch(`http://localhost:5000/api/db/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            firstName: newFirstName,
+            lastName: newLastName,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => console.log(data))
+          .catch((error) => console.error(error));
+      }
+
+      function deleteRow() {
+        const id = document.getElementById("deleteId").value;
+
+        fetch(`http://localhost:5000/api/db/${id}`, {
+          method: "DELETE",
+        })
+          .then((response) => response.json())
+          .then((data) => console.log(data))
+          .catch((error) => console.error(error));
+      }
+
+      const allResult = document.getElementById("allResult");
+
+      function getRows() {
+        fetch("http://localhost:5000/api/db")
+          .then((response) => response.json())
+          .then(
+            (data) =>
+              (allResult.innerHTML = data
+                .map(
+                  (el) =>
+                    `id: ${el.id} firstName: ${el.firstName} lastName: ${el.lastName}`
+                )
+                .join("<br />"))
+          )
+          .catch((error) => console.error(error));
+      }
+    </script>
+  </body>
+</html>
