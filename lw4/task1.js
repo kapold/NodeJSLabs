@@ -1,10 +1,8 @@
 const express = require("express");
-const cors = require("cors");
 const db = require("./task1_db");
 
 const app = express();
 
-app.use(cors());
 app.use(express.json());
 
 app.get("/api/db", async (req, res) => {

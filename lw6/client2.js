@@ -1,27 +1,25 @@
-const net = require('net');
+const net = require("net");
 
-const serverAddress = 'localhost';
-const serverPort = parseInt(process.argv[2]);
-const x = parseInt(process.argv[3]);
+const PORT = process.argv[2] || 40000;
+let number = process.argv[3] || 3;
+const HOST = process.env.PORT || "127.0.0.1";
 
 const client = new net.Socket();
-let subtotal = 0;
+let timerId = null;
+buf = new Buffer.alloc(4);
 
-// node <fileName> <port> <count>
-
-client.connect(serverPort, serverAddress, () => {
-    console.log(`Connected to server at ${serverAddress}:${serverPort}`);
-    setInterval(() => {
-        console.log(`Sending number ${x} to server`);
-        client.write(Buffer.alloc(4, x)); // 4-byte buffer for 32-bit number
+client.connect(PORT, HOST, function () {
+    console.log("Connected");
+    timerId = setInterval(() => {
+        buf.writeInt32LE(number++, 0);
+        client.write(buf);
     }, 1000);
 });
 
-client.on('data', (data) => {
-    subtotal = parseInt(data);
-    console.log(`Received subtotal ${subtotal} from server`);
+client.on("data", function (data) {
+    console.log(`${data.readInt32LE()}`);
 });
 
-client.on('close', () => {
-    console.log('Connection to server closed');
+client.on("close", function () {
+    console.log("Connection closed");
 });

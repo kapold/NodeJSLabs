@@ -16,9 +16,9 @@ app.post('/send', (req, res) => {
         port: 465,
         secure: true,
         auth: {
-            user: 'your email',
+            user: 'example@mail',
             // пароль нужно генерить в почте отдельно для сторонних приложений
-            pass: 'password for email'
+            pass: 'some password'
         }
     });
 

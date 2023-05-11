@@ -2,7 +2,7 @@
   "name": "m0603_adamovich",
   "version": "1.0.0",
   "description": "m0603 package for sending message through nodemailer",
-  "main": "index.js",
+  "main": "m0603.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
+    "m0603_adam": "^1.0.0",
     "nodemailer": "^6.9.1"
   }
 }

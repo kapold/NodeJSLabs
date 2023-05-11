@@ -1,48 +1,55 @@
-const net = require('net');
+const net = require("net");
 
-const PORT1 = 40000;
-const PORT2 = 50000;
+const PORTS = process.env.PORT || [40000, 50000];
+const HOST = process.env.PORT || "127.0.0.1";
 
-const server1 = net.createServer((socket) => {
-    console.log(`Client ${socket.remoteAddress}:${socket.remotePort} connected to port ${PORT1}`);
-    let sum = 0;
-    socket.on('data', (data) => {
-        const num = data.readInt32BE();
-        console.log(`Received number ${num} from client ${socket.remoteAddress}:${socket.remotePort}`);
-        sum += num;
+let sockets = [];
+let servers = [];
+net.Socket.prototype.sum = 0;
+
+PORTS.forEach((port) => {
+    const server = net.createServer();
+    server.listen(port, HOST, () => {
+        console.log("New TCP Server is running on port " + port);
     });
-    setInterval(() => {
-        const subtotal = sum;
-        console.log(`Sending subtotal ${subtotal} to client ${socket.remoteAddress}:${socket.remotePort}`);
-        socket.write(subtotal.toString());
-    }, 5000);
-    socket.on('end', () => {
-        console.log(`Client ${socket.remoteAddress}:${socket.remotePort} disconnected from port ${PORT1}`);
-    });
+    servers.push(server);
 });
 
-const server2 = net.createServer((socket) => {
-    console.log(`Client ${socket.remoteAddress}:${socket.remotePort} connected to port ${PORT2}`);
-    let sum = 0;
-    socket.on('data', (data) => {
-        const num = data.readInt32BE();
-        console.log(`Received number ${num} from client ${socket.remoteAddress}:${socket.remotePort}`);
-        sum += num;
-    });
-    setInterval(() => {
-        const subtotal = sum;
-        console.log(`Sending subtotal ${subtotal} to client ${socket.remoteAddress}:${socket.remotePort}`);
-        socket.write(subtotal.toString());
-    }, 5000);
-    socket.on('end', () => {
-        console.log(`Client ${socket.remoteAddress}:${socket.remotePort} disconnected from port ${PORT2}`);
-    });
-});
+servers.forEach((server) => {
+    server.on("connection", function (sock) {
+        let buffer = new Buffer.alloc(4);
+        setInterval(() => {
+            buffer.writeInt32LE(sock.sum, 0);
+            sock.write(buffer);
+        }, 5000);
 
-server1.listen(PORT1, () => {
-    console.log(`Server listening on port ${PORT1}`);
-});
+        console.log(
+            `Server ${server.address().port} CONNECTED: ${sock.remoteAddress}:${
+                sock.remotePort
+            }`
+        );
+        sockets.push(sock);
 
-server2.listen(PORT2, () => {
-    console.log(`Server listening on port ${PORT2}`);
+        sock.on("data", function (data) {
+            console.log(
+                `DATA ${sock.remoteAddress}:${sock.remotePort} -> ${data.readInt32LE()}`
+            );
+            sock.sum += data.readInt32LE();
+        });
+
+        sock.on("close", function (data) {
+            let index = sockets.findIndex(function (o) {
+                return (
+                    o.remoteAddress === sock.remoteAddress &&
+                    o.remotePort === sock.remotePort
+                );
+            });
+            if (index !== -1) sockets.splice(index, 1);
+            console.log(`CLOSED: ${sock.remoteAddress}:${sock.remotePort}`);
+        });
+
+        sock.on("error", function () {
+            console.log("ERROR EMMITED");
+        });
+    });
 });
